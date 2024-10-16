@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   // For now, mock a response:
   console.log(`getting lyrics for ${track} ${artist}`);
 
-  var lyrics = "";
+  let lyrics = "";
   if (type === "track") {
     const trackDetails = await findLyricsForTrack(spotifyAccessToken, url);
     lyrics = trackDetails?.lyrics ?? "";

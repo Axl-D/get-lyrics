@@ -27,33 +27,33 @@ export async function copyTemplate(googleAccessToken: string, templateId: string
 }
 
 // Step 4: Insert lyrics into Google Docs template
-async function insertLyricsToGoogleDoc(googleAccessToken: string, docId: string, lyrics: string) {
-  const authClient = new google.auth.OAuth2();
-  authClient.setCredentials({
-    access_token: googleAccessToken,
-  });
-  const docs = google.docs({ version: "v1", auth: authClient });
+// async function insertLyricsToGoogleDoc(googleAccessToken: string, docId: string, lyrics: string) {
+//   const authClient = new google.auth.OAuth2();
+//   authClient.setCredentials({
+//     access_token: googleAccessToken,
+//   });
+//   const docs = google.docs({ version: "v1", auth: authClient });
 
-  // Example: Replace the placeholder "{{lyrics}}" in the template with actual lyrics
-  await docs.documents.batchUpdate({
-    documentId: docId,
-    requestBody: {
-      requests: [
-        {
-          replaceAllText: {
-            containsText: {
-              text: "{{lyrics}}",
-              matchCase: true,
-            },
-            replaceText: lyrics,
-          },
-        },
-      ],
-    },
-  });
+//   // Example: Replace the placeholder "{{lyrics}}" in the template with actual lyrics
+//   await docs.documents.batchUpdate({
+//     documentId: docId,
+//     requestBody: {
+//       requests: [
+//         {
+//           replaceAllText: {
+//             containsText: {
+//               text: "{{lyrics}}",
+//               matchCase: true,
+//             },
+//             replaceText: lyrics,
+//           },
+//         },
+//       ],
+//     },
+//   });
 
-  console.log("Lyrics inserted into Google Doc.");
-}
+//   console.log("Lyrics inserted into Google Doc.");
+// }
 
 // Step 5: Main function to authenticate and call the Docs API
 
