@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function LyricsForm() {
@@ -10,12 +10,18 @@ export default function LyricsForm() {
   const [type, setType] = useState<"playlist" | "track" | "manual">("playlist");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
+  const [accessToken, setAccessToken] = useState<string | null>(null); // State for access token
 
   const options = [
     { label: "Spotify Playlist", value: "playlist" },
     { label: "Spotify Track URL", value: "track" },
     { label: "Manual Input", value: "manual" },
   ];
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("spotify_access_token");
+    setAccessToken(storedToken); // Set the access token in state
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +31,6 @@ export default function LyricsForm() {
       if (type === "manual") {
         requestData = { type, artist, track };
       } else {
-        const accessToken = localStorage.getItem("spotify_access_token");
         requestData = { type, url, accessToken };
       }
 
