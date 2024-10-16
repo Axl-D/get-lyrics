@@ -7,7 +7,8 @@ export async function POST(request: Request) {
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirectUri = "http://localhost:3000/"; // Replace with your actual redirect URI
+  // const redirectUri = "http://localhost:3000/";
+  const redirectUri = "https://get-lyrics-ivory.vercel.app/";
 
   const tokenUrl = "https://accounts.spotify.com/api/token";
 

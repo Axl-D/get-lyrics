@@ -7,7 +7,9 @@ export default function SpotifyAuthButton() {
   const [token, setToken] = useState<string | null>(null);
 
   const clientId = "8f63907af9e64b928b302cef4b09f848";
-  const redirectUri = "http://localhost:3000/";
+  //   const redirectUri = "http://localhost:3000/";
+  const redirectUri = "https://get-lyrics-ivory.vercel.app/";
+
   const scopes = [
     "user-read-private",
     "user-read-email",
