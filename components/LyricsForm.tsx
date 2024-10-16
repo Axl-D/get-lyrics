@@ -32,7 +32,7 @@ export default function LyricsForm() {
       const response = await axios.post("/api/get-lyrics", requestData);
       setResult(response.data.lyrics); // Assuming response contains 'lyrics'
     } catch (err) {
-      setResult("Error fetching lyrics.");
+      setResult(`Error fetching lyrics : ${err}`);
     } finally {
       setLoading(false);
     }
