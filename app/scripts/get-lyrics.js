@@ -29,18 +29,18 @@ function extractSpotifyId(url) {
 }
 
 // 1.0 Fetch spotify playlist
-async function getSpotifyPlaylistTracks(accessToken, playlistId) {
-  const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  const data = await response.json();
-  return data.items.map((item) => ({
-    trackName: item.track.name,
-    artistName: item.track.artists[0].name,
-  }));
-}
+// async function getSpotifyPlaylistTracks(accessToken, playlistId) {
+//   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//   });
+//   const data = await response.json();
+//   return data.items.map((item) => ({
+//     trackName: item.track.name,
+//     artistName: item.track.artists[0].name,
+//   }));
+// }
 
 // 1.1 Get song info from Spotify (Spotify access token is needed)
 async function getSpotifyTrackInfo(accessToken, trackId) {
@@ -158,30 +158,30 @@ export async function findLyricsForTrack(accessToken, trackUrl) {
   }
 }
 
-export async function findLyricsForPlaylist(playlistUrl) {
-  try {
-    const playlistId = extractSpotifyId(playlistUrl);
+// export async function findLyricsForPlaylist(playlistUrl) {
+//   try {
+//     const playlistId = extractSpotifyId(playlistUrl);
 
-    const accessToken = await getSpotifyToken();
-    const tracks = await getSpotifyPlaylistTracks(accessToken, playlistId);
+//     const accessToken = await getSpotifyToken();
+//     const tracks = await getSpotifyPlaylistTracks(accessToken, playlistId);
 
-    for (var i = 0; i < tracks.length; i++) {
-      try {
-        const lyricsUrl = await getGeniusLyricsUrl(tracks[i].trackName, tracks[i].artistName);
-        const lyrics = await scrapeLyricsFromGenius(lyricsUrl);
-        tracks[i].lyricsUrl = lyricsUrl;
-        tracks[i].lyrics = lyrics;
+//     for (var i = 0; i < tracks.length; i++) {
+//       try {
+//         const lyricsUrl = await getGeniusLyricsUrl(tracks[i].trackName, tracks[i].artistName);
+//         const lyrics = await scrapeLyricsFromGenius(lyricsUrl);
+//         tracks[i].lyricsUrl = lyricsUrl;
+//         tracks[i].lyrics = lyrics;
 
-        const templateId = "1E34WLQKNi5OBRjVTrHHwsQ6K5XX1fya79-3ywXlvFgw";
-        await createLyricsDoc(tracks[i].artistName, tracks[i].trackName, tracks[i].lyrics, templateId);
-      } catch (error) {
-        console.log("no lyrics found for ", tracks[i].trackName, tracks[i].artistName);
-        tracks[i].lyricsUrl = null;
-        tracks[i].lyrics = null;
-      }
-    }
-    return tracks;
-  } catch (error) {
-    console.error("Error while processing playlist:", error.message);
-  }
-}
+//         const templateId = "1E34WLQKNi5OBRjVTrHHwsQ6K5XX1fya79-3ywXlvFgw";
+//         await createLyricsDoc(tracks[i].artistName, tracks[i].trackName, tracks[i].lyrics, templateId);
+//       } catch (error) {
+//         console.log("no lyrics found for ", tracks[i].trackName, tracks[i].artistName);
+//         tracks[i].lyricsUrl = null;
+//         tracks[i].lyrics = null;
+//       }
+//     }
+//     return tracks;
+//   } catch (error) {
+//     console.error("Error while processing playlist:", error.message);
+//   }
+// }

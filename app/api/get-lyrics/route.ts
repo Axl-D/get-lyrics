@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import {
   findLyricsForTrack,
-  findLyricsForPlaylist,
+  // findLyricsForPlaylist,
   getGeniusLyricsUrl,
   scrapeLyricsFromGenius,
 } from "../../scripts/get-lyrics.js";
