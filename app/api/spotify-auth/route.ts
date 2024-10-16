@@ -1,4 +1,3 @@
-// app/api/spotify-auth/route.ts
 import { NextResponse } from "next/server";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -7,11 +6,11 @@ dotenv.config();
 
 export async function POST(request: Request) {
   const { code } = await request.json();
-  const clientId = process.env.SPOTIFY_CLIENT_ID; // Ensure you set this in your .env file
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET; // Ensure you set this in your .env file
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const redirectUri =
     (process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://get-lyrics-ivory.vercel.app/") +
-    "spotify-auth"; // Ensure you set this in your .env file
+    "spotify-auth";
 
   try {
     const response = await axios.post("https://accounts.spotify.com/api/token", null, {
@@ -26,11 +25,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json(response.data);
   } catch (error) {
-    // Check if the error is an AxiosError
+    console.error("Error exchanging code for token:", error);
     if (axios.isAxiosError(error)) {
-      console.error("Error exchanging code for token:", error.response?.data || error.message);
-    } else {
-      console.error("Unexpected error:", error);
+      return NextResponse.json({ error: error.response?.data || error.message }, { status: 500 });
     }
+    return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
 }
