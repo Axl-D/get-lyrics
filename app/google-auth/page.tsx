@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react"; // Import useRef
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const SpotifyAuthPage = () => {
+const GoogleAuthPage = () => {
   const router = useRouter();
   const hasTokenBeenExchanged = useRef(false); // Use useRef to track token exchange
 
@@ -17,11 +17,11 @@ const SpotifyAuthPage = () => {
       // Function to exchange the code for an access token
       const exchangeCodeForToken = async () => {
         try {
-          const response = await axios.post("/api/spotify-auth", { code });
+          const response = await axios.post("/api/google-auth", { code });
           const { access_token } = response.data;
 
-          // Set the token as a cookie with an expiration time of 1 hour (3600 seconds)
-          document.cookie = `spotify_access_token=${access_token}; max-age=3600; path=/; secure; samesite=strict`;
+          // Store the token in local storage
+          localStorage.setItem("google_access_token", access_token);
 
           // Clean up the URL to prevent re-triggering the token exchange
           window.history.replaceState({}, document.title, window.location.pathname);
@@ -44,4 +44,4 @@ const SpotifyAuthPage = () => {
   return <div>Loading...</div>; // Optional loading state while processing
 };
 
-export default SpotifyAuthPage;
+export default GoogleAuthPage;

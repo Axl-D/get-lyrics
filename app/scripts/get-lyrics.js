@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import "dotenv/config";
-// import { createLyricsDoc } from "./create-google-doc.js";
+// import { createLyricsDoc } from "./create-google-doc.ts";
 
 // 0. Get Spotify Access token
 async function getSpotifyToken() {

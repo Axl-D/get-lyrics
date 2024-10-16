@@ -3,14 +3,26 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Helper function to get a specific cookie by name
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+  return null;
+};
+
 export default function LyricsForm() {
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState(
+    "https://open.spotify.com/track/2KrN3MCNztKcSleZgHEj83?si=b9f223f056bd4896&nd=1&dlsi=92f2effe6fd143bc"
+  );
   const [artist, setArtist] = useState(""); // For manual artist input
   const [track, setTrack] = useState(""); // For manual track input
   const [type, setType] = useState<"playlist" | "track" | "manual">("playlist");
+  const [templateId, setTemplateId] = useState("1E34WLQKNi5OBRjVTrHHwsQ6K5XX1fya79-3ywXlvFgw");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
-  const [accessToken, setAccessToken] = useState<string | null>(null); // State for access token
+  const [spotifyAccessToken, setSpotifyAccessToken] = useState<string | null>(null); // State for access token
+  const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(null); // State for access token
 
   const options = [
     { label: "Spotify Playlist", value: "playlist" },
@@ -19,8 +31,13 @@ export default function LyricsForm() {
   ];
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("spotify_access_token");
-    setAccessToken(storedToken); // Set the access token in state
+    // Retrieve Spotify token from cookies
+    const storedSToken = getCookie("spotify_access_token");
+    setSpotifyAccessToken(storedSToken ?? "");
+
+    // Retrieve Google token from local storage (if still using local storage for Google access token)
+    const storedGToken = localStorage.getItem("google_access_token");
+    setGoogleAccessToken(storedGToken);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,13 +48,13 @@ export default function LyricsForm() {
       if (type === "manual") {
         requestData = { type, artist, track };
       } else {
-        requestData = { type, url, accessToken };
+        requestData = { type, url, spotifyAccessToken, googleAccessToken, templateId };
       }
 
       const response = await axios.post("/api/get-lyrics", requestData);
       setResult(response.data.lyrics); // Assuming response contains 'lyrics'
     } catch (err) {
-      setResult(`Error fetching lyrics : ${err}`);
+      setResult(`Error fetching lyrics: ${err}`);
     } finally {
       setLoading(false);
     }
@@ -95,7 +112,13 @@ export default function LyricsForm() {
             className="p-2 w-full border border-gray-300"
           />
         )}
-
+        <input
+          type="text"
+          placeholder="Google Doc Lyrics Template Id"
+          className="p-2 w-full border border-gray-300"
+          defaultValue={"1E34WLQKNi5OBRjVTrHHwsQ6K5XX1fya79-3ywXlvFgw"}
+          onChange={(e) => setTemplateId(e.target.value)}
+        ></input>
         <button onClick={handleSubmit} className="p-2 bg-blue-600 text-white w-full" disabled={loading}>
           {loading ? "Fetching..." : "Get Lyrics"}
         </button>

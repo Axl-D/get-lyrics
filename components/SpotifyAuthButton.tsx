@@ -2,6 +2,14 @@
 
 import { useState, useEffect } from "react";
 
+// Helper function to get a specific cookie by name
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+  return null;
+};
+
 export default function SpotifyAuthButton() {
   const [token, setToken] = useState<string | null>(null);
 
@@ -20,9 +28,9 @@ export default function SpotifyAuthButton() {
     scopes
   )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
-  // Function to check for existing token in local storage
+  // Function to check for existing token in cookies
   useEffect(() => {
-    const storedToken = localStorage.getItem("spotify_access_token");
+    const storedToken = getCookie("spotify_access_token");
     if (storedToken) {
       setToken(storedToken);
     }
